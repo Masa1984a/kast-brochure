@@ -108,4 +108,4 @@ kast-brochure/
 
 ## ライセンス
 
-© 2025 KAST Card. All rights reserved.
+© 2025 mStarJP (https://x.com/mStarJP)  All rights reserved.
