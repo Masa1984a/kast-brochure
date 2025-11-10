@@ -10,7 +10,7 @@ export default function ShareButton({ referralCode }: ShareButtonProps) {
   const referralURL = getReferralURL(referralCode);
 
   const handleShare = async () => {
-    const shareText = `Join KAST with my referral code: ${referralCode}`;
+    const shareText = `💳 KAST Card benefits are INSANE! This is your last card. \r\nSign up now: `;
     const twitterURL = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
       shareText
     )}&url=${encodeURIComponent(referralURL)}`;

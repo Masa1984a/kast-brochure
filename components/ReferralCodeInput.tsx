@@ -2,7 +2,7 @@
 
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { validateReferralCode, validateReferralCodeRealtime } from '@/lib/validators';
+import { validateReferralCode, validateReferralCodeRealtime, extractReferralCode } from '@/lib/validators';
 
 export default function ReferralCodeInput() {
   const router = useRouter();
@@ -11,19 +11,40 @@ export default function ReferralCodeInput() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.toUpperCase();
+    const value = e.target.value;
     setReferralCode(value);
 
-    // リアルタイムバリデーション
-    const validation = validateReferralCodeRealtime(value);
+    // Don't validate while typing if it looks like a URL
+    if (value.includes('http') || value.includes('go.kast.xyz')) {
+      setError('');
+      return;
+    }
+
+    // Real-time validation for codes
+    const validation = validateReferralCodeRealtime(value.toUpperCase());
+    setError(validation.error || '');
+  };
+
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedText = e.clipboardData.getData('text');
+    const extractedCode = extractReferralCode(pastedText);
+
+    setReferralCode(extractedCode);
+
+    // Validate extracted code
+    const validation = validateReferralCodeRealtime(extractedCode);
     setError(validation.error || '');
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // 送信時の最終バリデーション
-    const validation = validateReferralCode(referralCode);
+    // Extract code if URL was entered
+    const extractedCode = extractReferralCode(referralCode);
+
+    // Final validation on submit
+    const validation = validateReferralCode(extractedCode);
 
     if (!validation.isValid) {
       setError(validation.error || '');
@@ -33,8 +54,8 @@ export default function ReferralCodeInput() {
     setIsSubmitting(true);
     setError('');
 
-    // ブローシャー表示画面へ遷移
-    router.push(`/brochure/${referralCode}`);
+    // Navigate to brochure display screen
+    router.push(`/brochure/${extractedCode}`);
   };
 
   return (
@@ -53,8 +74,8 @@ export default function ReferralCodeInput() {
             name="referralCode"
             value={referralCode}
             onChange={handleChange}
-            placeholder="e.g., SAPPORO"
-            maxLength={8}
+            onPaste={handlePaste}
+            placeholder="e.g., SAPPORO or https://go.kast.xyz/VqVO/SAPPORO"
             className={`w-full px-4 py-3 text-lg border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
               error
                 ? 'border-red-500 focus:ring-red-500'
@@ -70,7 +91,7 @@ export default function ReferralCodeInput() {
             </p>
           )}
           <p className="mt-2 text-xs text-gray-500">
-            Enter 6-8 alphanumeric characters
+            Enter 6-8 alphanumeric characters or paste a referral URL
           </p>
         </div>
 

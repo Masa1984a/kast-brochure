@@ -1,6 +1,41 @@
 import { ValidationResult } from '@/types';
 
 /**
+ * Extract referral code from URL if input is a URL
+ * @param input Input string (code or URL)
+ * @returns Extracted referral code or original input
+ */
+export function extractReferralCode(input: string): string {
+  if (!input) return input;
+
+  const trimmedInput = input.trim();
+
+  // Check if input is a URL
+  try {
+    // Try to parse as URL
+    const url = new URL(trimmedInput);
+
+    // Check if it's a KAST referral URL
+    if (url.hostname === 'go.kast.xyz' && url.pathname.startsWith('/VqVO/')) {
+      // Extract code from path (e.g., /VqVO/SAPPORO -> SAPPORO)
+      const code = url.pathname.replace('/VqVO/', '').split('/')[0];
+      return code.toUpperCase();
+    }
+  } catch (e) {
+    // Not a valid URL, treat as referral code
+  }
+
+  // Check if input looks like a URL without protocol
+  if (trimmedInput.startsWith('go.kast.xyz/VqVO/')) {
+    const code = trimmedInput.replace('go.kast.xyz/VqVO/', '').split('/')[0];
+    return code.toUpperCase();
+  }
+
+  // Return original input (likely already a code)
+  return trimmedInput.toUpperCase();
+}
+
+/**
  * Validate referral code
  * @param code Referral code
  * @returns Validation result
