@@ -13,7 +13,7 @@ export default function DownloadButton({ canvas, referralCode }: DownloadButtonP
 
   const handleDownload = async () => {
     if (!canvas) {
-      alert('画像が生成されていません');
+      alert('Image not generated');
       return;
     }
 
@@ -21,8 +21,8 @@ export default function DownloadButton({ canvas, referralCode }: DownloadButtonP
       setIsDownloading(true);
       await downloadBrochure(canvas, referralCode);
     } catch (error) {
-      console.error('ダウンロードエラー:', error);
-      alert('ダウンロードに失敗しました');
+      console.error('Download error:', error);
+      alert('Failed to download');
     } finally {
       setIsDownloading(false);
     }

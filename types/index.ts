@@ -1,10 +1,10 @@
-// バリデーション結果の型
+// Validation result type
 export interface ValidationResult {
   isValid: boolean;
   error?: string;
 }
 
-// バリデーションルールの型
+// Validation rules type
 export interface ValidationRules {
   minLength: 6;
   maxLength: 8;
@@ -16,20 +16,20 @@ export interface ValidationRules {
   };
 }
 
-// 紹介コード入力の型
+// Referral code input type
 export interface ReferralInput {
   referralCode: string;
   timestamp?: Date;
 }
 
-// リファラルURL設定の型
+// Referral URL configuration type
 export interface ReferralURLConfig {
   baseURL: string;
   referralCode: string;
   generatedURL: string;
 }
 
-// QRコード設定の型
+// QR code configuration type
 export interface QRCodeConfig {
   width: number;
   height: number;
@@ -47,7 +47,7 @@ export interface QRCodeConfig {
   errorCorrectionLevel: 'L' | 'M' | 'Q' | 'H';
 }
 
-// Canvas オーバーレイの型
+// Canvas overlay type
 export interface CanvasOverlay {
   urlText: {
     position: { x: number; y: number };
@@ -63,7 +63,7 @@ export interface CanvasOverlay {
   };
 }
 
-// ブローシャー出力の型
+// Brochure output type
 export interface BrochureOutput {
   imageBlob: Blob;
   referralURL: string;
@@ -71,7 +71,7 @@ export interface BrochureOutput {
   generatedAt: Date;
 }
 
-// シェアデータの型
+// Share data type
 export interface ShareData {
   title: string;
   text: string;

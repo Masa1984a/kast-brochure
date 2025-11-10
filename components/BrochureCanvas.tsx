@@ -39,8 +39,8 @@ export default function BrochureCanvas({ referralCode, onCanvasReady }: Brochure
 
         setIsLoading(false);
       } catch (err) {
-        console.error('ブローシャー生成エラー:', err);
-        setError('ブローシャーの生成に失敗しました');
+        console.error('Brochure generation error:', err);
+        setError('Failed to generate brochure');
         setIsLoading(false);
       }
     };
@@ -56,7 +56,7 @@ export default function BrochureCanvas({ referralCode, onCanvasReady }: Brochure
           onClick={() => window.location.reload()}
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg"
         >
-          再試行
+          Retry
         </button>
       </div>
     );
@@ -68,7 +68,7 @@ export default function BrochureCanvas({ referralCode, onCanvasReady }: Brochure
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">ブローシャーを生成中...</p>
+            <p className="text-gray-600">Generating brochure...</p>
           </div>
         </div>
       )}

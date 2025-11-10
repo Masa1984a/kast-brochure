@@ -53,7 +53,7 @@ export default function ReferralCodeInput() {
             name="referralCode"
             value={referralCode}
             onChange={handleChange}
-            placeholder="例: SAPPORO"
+            placeholder="e.g., SAPPORO"
             maxLength={8}
             className={`w-full px-4 py-3 text-lg border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
               error
@@ -70,7 +70,7 @@ export default function ReferralCodeInput() {
             </p>
           )}
           <p className="mt-2 text-xs text-gray-500">
-            6-8文字の英数字を入力してください
+            Enter 6-8 alphanumeric characters
           </p>
         </div>
 

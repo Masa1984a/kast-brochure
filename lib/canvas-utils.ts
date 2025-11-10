@@ -2,10 +2,10 @@ import { generateQRCodeImage } from './qr-generator';
 import { getReferralURL } from './url-generator';
 
 /**
- * ブローシャー画像を生成
- * @param baseImageUrl ベース画像のURL
- * @param referralCode 紹介コード
- * @returns Canvas要素
+ * Generate brochure image
+ * @param baseImageUrl Base image URL
+ * @param referralCode Referral code
+ * @returns Canvas element
  */
 export async function generateBrochure(
   baseImageUrl: string,
@@ -15,48 +15,48 @@ export async function generateBrochure(
   const ctx = canvas.getContext('2d');
 
   if (!ctx) {
-    throw new Error('Canvas context を取得できませんでした');
+    throw new Error('Failed to get Canvas context');
   }
 
-  // ベース画像読み込み
+  // Load base image
   const baseImage = await loadImage(baseImageUrl);
   canvas.width = baseImage.width;
   canvas.height = baseImage.height;
 
-  // ベース画像描画
+  // Draw base image
   ctx.drawImage(baseImage, 0, 0);
 
-  // リファラルURL生成
+  // Generate referral URL
   const referralURL = getReferralURL(referralCode);
 
-  // URLテキストを描画（画像の下部右側）
+  // Draw URL text (bottom right of image)
   ctx.font = '30px Meiryo, sans-serif';
   ctx.fillStyle = '#FFFFFF';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'bottom';
 
-  // テキストに影を追加して視認性を向上
+  // Add shadow to text for better visibility
   ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
   ctx.shadowBlur = 4;
   ctx.shadowOffsetX = 2;
   ctx.shadowOffsetY = 2;
 
-  // URLテキストを右下に配置
+  // Place URL text at bottom right
   ctx.fillText(referralURL, 1155, 1050);
 
-  // 影をリセット
+  // Reset shadow
   ctx.shadowColor = 'transparent';
   ctx.shadowBlur = 0;
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
 
-  // QRコード生成と描画
+  // Generate and draw QR code
   try {
     const qrImage = await generateQRCodeImage(referralURL);
-    // QRコードを画像右下に描画
+    // Draw QR code at bottom right
     ctx.drawImage(qrImage, 1680, 798, 200, 200);
   } catch (error) {
-    console.error('QRコード描画エラー:', error);
+    console.error('QR code drawing error:', error);
     throw error;
   }
 
@@ -64,24 +64,24 @@ export async function generateBrochure(
 }
 
 /**
- * 画像を読み込む
- * @param src 画像のソースURL
+ * Load image
+ * @param src Image source URL
  * @returns Promise<HTMLImageElement>
  */
 async function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous'; // CORS対応
+    img.crossOrigin = 'anonymous'; // CORS support
     img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error(`画像の読み込みに失敗しました: ${src}`));
+    img.onerror = () => reject(new Error(`Failed to load image: ${src}`));
     img.src = src;
   });
 }
 
 /**
- * Canvasから画像をダウンロード
- * @param canvas Canvas要素
- * @param referralCode 紹介コード（ファイル名に使用）
+ * Download image from Canvas
+ * @param canvas Canvas element
+ * @param referralCode Referral code (used for filename)
  */
 export async function downloadBrochure(
   canvas: HTMLCanvasElement,
@@ -91,7 +91,7 @@ export async function downloadBrochure(
     canvas.toBlob(
       (blob) => {
         if (!blob) {
-          reject(new Error('画像の生成に失敗しました'));
+          reject(new Error('Failed to generate image'));
           return;
         }
 
@@ -101,7 +101,7 @@ export async function downloadBrochure(
         link.download = `KAST_Brochure_${referralCode}.png`;
         link.click();
 
-        // メモリ解放
+        // Release memory
         setTimeout(() => {
           URL.revokeObjectURL(url);
           resolve();
@@ -114,8 +114,8 @@ export async function downloadBrochure(
 }
 
 /**
- * Canvasから画像をBlobとして取得
- * @param canvas Canvas要素
+ * Get image as Blob from Canvas
+ * @param canvas Canvas element
  * @returns Promise<Blob>
  */
 export async function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
@@ -123,7 +123,7 @@ export async function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
     canvas.toBlob(
       (blob) => {
         if (!blob) {
-          reject(new Error('画像の生成に失敗しました'));
+          reject(new Error('Failed to generate image'));
           return;
         }
         resolve(blob);

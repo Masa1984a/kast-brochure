@@ -1,9 +1,9 @@
 import QRCodeStyling, { Options } from 'qr-code-styling';
 
 /**
- * QRコードを生成
- * @param url リファラルURL
- * @returns QRコードのData URL
+ * Generate QR code
+ * @param url Referral URL
+ * @returns QR code Data URL
  */
 export async function generateQRCode(url: string): Promise<string> {
   const config: Options = {
@@ -30,20 +30,20 @@ export async function generateQRCode(url: string): Promise<string> {
   try {
     const blob = await qrCode.getRawData('png');
     if (!blob) {
-      throw new Error('QRコードの生成に失敗しました');
+      throw new Error('Failed to generate QR code');
     }
-    // Bufferの場合はBlobに変換
+    // Convert Buffer to Blob if needed
     const blobData = blob instanceof Blob ? blob : new Blob([blob as BlobPart], { type: 'image/png' });
     return URL.createObjectURL(blobData);
   } catch (error) {
-    console.error('QRコード生成エラー:', error);
+    console.error('QR code generation error:', error);
     throw error;
   }
 }
 
 /**
- * QRコードをCanvas用のImageオブジェクトとして生成
- * @param url リファラルURL
+ * Generate QR code as Image object for Canvas
+ * @param url Referral URL
  * @returns HTMLImageElement
  */
 export async function generateQRCodeImage(url: string): Promise<HTMLImageElement> {
@@ -52,8 +52,8 @@ export async function generateQRCodeImage(url: string): Promise<HTMLImageElement
 }
 
 /**
- * 画像を読み込む
- * @param src 画像のソースURL
+ * Load image
+ * @param src Image source URL
  * @returns Promise<HTMLImageElement>
  */
 function loadImage(src: string): Promise<HTMLImageElement> {
